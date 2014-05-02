@@ -24,20 +24,6 @@
 //We use a 3 vec array to present our rooms' position in the world
 var AllScene = [];
 
-AllScene.Controler = function ()  {};
-AllScene.Controler.prototype =
-{
-	currentRoom : new AllScene.Room('none_file');
-	sceneRooms : new AllScene.SysRooms(),
-	Move : function (dir)
-	{
-		
-		//To Do: change the 'cureent room' with dir(up, down, left, right, forward, back)
-		
-	}
-	
-}
-
 AllScene.SysRooms = function (w, h, t)
 {
 	this.setRange(w, h, t);
@@ -57,7 +43,7 @@ AllScene.SysRooms.prototype =
 		this.width = w;
 		this.height = h;
 		this.thickness = t;
-		init();
+		this.init();
 	},
 	
 	init : function ()
@@ -82,20 +68,34 @@ AllScene.SysRooms.prototype =
 }
 
 //One room contains a scene to render
-AllScene.Room = function (file)  {}
+AllScene.Room = function (file) { };
 
 AllScene.Room.prototype =
 {
 	
 	file : 'none_file',
 	
-	scene : new THREE.Scene(),
+	scene : 'THREE.Scene()',
 	
-	loadModel : function
+	loadModel : function()
 	{
 		//To Do: load the modle to the scene
 	}
-	
+
+}
+
+
+AllScene.Controler = function () { };
+AllScene.Controler.prototype =
+{
+    currentRoom: new AllScene.Room('none_file'),
+    sceneRooms: new AllScene.SysRooms(),
+    Move: function (dir) {
+
+        //To Do: change the 'cureent room' with dir(up, down, left, right, forward, back)
+
+    }
+
 }
 </script>
 
