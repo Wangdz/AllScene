@@ -20,70 +20,82 @@
     </form>
 </body>
 </html>
-<script type="text/javascript">
-    //We use a 3 vec array to present our rooms' position in the world
-    var AllScene = [];
-    
-    AllScene.Controler = function(){};
-    AllScene.Controler.prototype = {
-        currentRoom: new AllScene.Room('none_file');
-        sceneRooms: new AllScene.SysRooms(),
-        Move: function (dir){
+<script type = "text/javascript">
+//We use a 3 vec array to present our rooms' position in the world
+var AllScene = [];
 
-          //To Do: change the 'cureent room' with dir(up, down, left, right, forward, back)
+AllScene.Controler = function ()  {};
+AllScene.Controler.prototype =
+{
+	currentRoom : new AllScene.Room('none_file');
+	sceneRooms : new AllScene.SysRooms(),
+	Move : function (dir)
+	{
+		
+		//To Do: change the 'cureent room' with dir(up, down, left, right, forward, back)
+		
+	}
+	
+}
 
-        }
-    
-    }
+AllScene.SysRooms = function (w, h, t)
+{
+	this.setRange(w, h, t);
+}
 
-    AllScene.SysRooms = function (w, h, t) {
-        this.setRange(w, h, t);
-    }
+AllScene.SysRooms.prototype =
+{
+	
+	width : 1,
+	height : 1,
+	thickness : 1,
+	
+	rooms : [],
+	
+	setRange : function (w, h, t)
+	{
+		this.width = w;
+		this.height = h;
+		this.thickness = t;
+		init();
+	},
+	
+	init : function ()
+	{
+		for (var i = 0; i < this.width; i++)
+		{
+			this.rooms.push(new Array());
+			for (var j = 0; j < this.height; j++)
+			{
+				this.rooms[i].push(new Array);
+				for (var m = 0; m < this.thickness; m++)
+					this.rooms[i][j].push(new AllScene.Room('none_file'));
+			}
+		}
+	},
+	
+	setModel : function (w, h, t, f)
+	{
+		this.rooms[w][h][t].file = f;
+	}
+	
+}
 
-    AllScene.SysRooms.prototype = {
+//One room contains a scene to render
+AllScene.Room = function (file)  {}
 
-        width: 1, height: 1, thickness: 1,
-
-        rooms: [],
-
-        setRange: function (w, h, t) {
-            this.width = w;
-            this.height = h;
-            this.thickness = t;
-            init();
-        },
-
-        init: function () {
-            for (var i = 0; i < this.width; i++) {
-                this.rooms.push(new Array());
-                for (var j = 0; j < this.height; j++) {
-                    this.rooms[i].push(new Array);
-                    for (var m = 0; m < this.thickness; m++)
-                        this.rooms[i][j].push(new AllScene.Room('none_file'));
-                }
-            }
-        },
-
-        setModel: function (w, h, t, f) {
-            this.rooms[w][h][t].file = f;
-        }
-
-
-    }
-
-   //One room contains a scene to render
-    AllScene.Room = function (file) {
-     }
-
-    AllScene.Room.prototype = {
-     
-     file: 'none_file',
-    
-     scene: new THREE.Scene(),
-     
-     loadModel: function{
-        //To Do: load the modle to the scene
-     }
-    
-    }
+AllScene.Room.prototype =
+{
+	
+	file : 'none_file',
+	
+	scene : new THREE.Scene(),
+	
+	loadModel : function
+	{
+		//To Do: load the modle to the scene
+	}
+	
+}
 </script>
+
