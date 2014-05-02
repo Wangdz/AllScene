@@ -24,7 +24,7 @@
 //We use a 3 vec array to present our rooms' position in the world
 var AllScene = function(){};
 
-AllScene.SysRooms = function (w, h, t)
+AllScene.SysRooms = function(w, h, t)
 {
 	this.setRange(w, h, t);
 }
@@ -32,13 +32,12 @@ AllScene.SysRooms = function (w, h, t)
 AllScene.SysRooms.prototype =
 {
 	
-	width : 1,
-	height : 1,
-	thickness : 1,
+	width: 1,
+	height: 1,
+	thickness: 1,
+	rooms: {},
 	
-	rooms : {},
-	
-	setRange : function (w, h, t)
+	setRange: function(w, h, t)
 	{
 		this.width = w;
 		this.height = h;
@@ -46,7 +45,7 @@ AllScene.SysRooms.prototype =
 		this.init();
 	},
 	
-	init : function ()
+	init: function()
 	{
 		for (var i = 0; i < this.width; i++)
 		{
@@ -60,7 +59,7 @@ AllScene.SysRooms.prototype =
 		}
 	},
 	
-	setModel : function (w, h, t, f)
+	setModel: function (w, h, t, f)
 	{
 		this.rooms[w][h][t].file = f;
 	}
@@ -68,16 +67,16 @@ AllScene.SysRooms.prototype =
 }
 
 //One room contains a scene to render
-AllScene.Room = function (file) { };
+AllScene.Room = function (file) {};
 
 AllScene.Room.prototype =
 {
 	
-	file : 'none_file',
+	file: 'none_file',
 	
-	scene : 'THREE.Scene()',
+	scene: 'THREE.Scene()',
 	
-	loadModel : function()
+	loadModel: function()
 	{
 		//To Do: load the modle to the scene
 	}
@@ -85,7 +84,7 @@ AllScene.Room.prototype =
 }
 
 
-AllScene.Controler = function () { };
+AllScene.Controler = function (){};
 AllScene.Controler.prototype =
 {
     currentRoom: new AllScene.Room('none_file'),
