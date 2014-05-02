@@ -22,7 +22,7 @@
 </html>
 <script type = "text/javascript">
 //We use a 3 vec array to present our rooms' position in the world
-var AllScene = [];
+var AllScene = function(){};
 
 AllScene.SysRooms = function (w, h, t)
 {
@@ -36,7 +36,7 @@ AllScene.SysRooms.prototype =
 	height : 1,
 	thickness : 1,
 	
-	rooms : [],
+	rooms : {},
 	
 	setRange : function (w, h, t)
 	{
