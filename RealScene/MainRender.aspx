@@ -20,18 +20,17 @@
     </form>
 </body>
 </html>
+<script type="text/javascript" src="../Core/three.js"></script>
 <script type = "text/javascript">
+var MoveDir = ['Left', 'Right', 'Forward', 'Back', 'Up', 'Down'];
 //We use a 3 vec array to present our rooms' position in the world
-var AllScene = function(){};
-
-AllScene.SysRooms = function(w, h, t)
+var AllScene = function(){}
+AllScene.RoomsContainer = function(w, h, t)
 {
 	this.setRange(w, h, t);
 }
-
-AllScene.SysRooms.prototype =
+AllScene.RoomsContainer.prototype =
 {
-	
 	width: 1,
 	height: 1,
 	thickness: 1,
@@ -67,15 +66,14 @@ AllScene.SysRooms.prototype =
 }
 
 //One room contains a scene to render
-AllScene.Room = function (file) {};
-
+AllScene.Room = function (file, pos) {
+    this.position = pos;
+}
 AllScene.Room.prototype =
 {
-	
+	position: new THREE.Vector3(),
 	file: 'none_file',
-	
-	scene: 'THREE.Scene()',
-	
+	scene: new THREE.Scene(),
 	loadModel: function()
 	{
 		//To Do: load the modle to the scene
@@ -83,18 +81,42 @@ AllScene.Room.prototype =
 
 }
 
-
-AllScene.Controler = function (){};
+AllScene.Controler = function () { }
 AllScene.Controler.prototype =
 {
     currentRoom: new AllScene.Room('none_file'),
-    sceneRooms: new AllScene.SysRooms(),
-    Move: function (dir) {
-
-        //To Do: change the 'cureent room' with dir(up, down, left, right, forward, back)
-
+    sceneRooms: new AllScene.RoomsContainer(),
+    callBack: function () { }, //May be we will do something when moving to another room
+    moveTo: function (x, y, z) {
+        try {
+            this.currentRoom = this.sceneRooms.rooms[x][y][z]
+        } catch (e) {
+            console.error('no such a room')
+        }
+    },
+    move: function (dir) {
+        //Right hand coordinate system z axis point to up
+        with (this.currentRoom.position) {
+            if (dir == 'Left') {
+                this.moveTo(x - 1, y, z)
+            }
+            else if (dir == 'Right') {
+                this.moveTo(x + 1, y, z)
+            }
+            else if (dir == 'Forward') {
+                this.moveTo(x, 1, z)
+            }
+            else if (dir == 'Back') {
+                this.moveTo(x, y - 1, z)
+            }
+            else if (dir == 'Up') {
+                this.moveTo(x, y, z + 1)
+            }
+            else if (dir == 'Down') {
+                this.moveTo(x, y, z - 1)
+            }
+        }
     }
-
 }
 </script>
 
