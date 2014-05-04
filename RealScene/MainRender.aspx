@@ -21,102 +21,35 @@
 </body>
 </html>
 <script type="text/javascript" src="../Core/three.js"></script>
+<script type="text/javascript" src="../Core/AllScene.js"></script>
 <script type = "text/javascript">
-var MoveDir = ['Left', 'Right', 'Forward', 'Back', 'Up', 'Down'];
-//We use a 3 vec array to present our rooms' position in the world
-var AllScene = function(){}
-AllScene.RoomsContainer = function(w, h, t)
-{
-	this.setRange(w, h, t);
-}
-AllScene.RoomsContainer.prototype =
-{
-	width: 1,
-	height: 1,
-	thickness: 1,
-	rooms: {},
-	
-	setRange: function(w, h, t)
-	{
-		this.width = w;
-		this.height = h;
-		this.thickness = t;
-		this.init();
-	},
-	
-	init: function()
-	{
-		for (var i = 0; i < this.width; i++)
-		{
-			this.rooms.push(new Array());
-			for (var j = 0; j < this.height; j++)
-			{
-				this.rooms[i].push(new Array);
-				for (var m = 0; m < this.thickness; m++)
-					this.rooms[i][j].push(new AllScene.Room('none_file'));
-			}
-		}
-	},
-	
-	setModel: function (w, h, t, f)
-	{
-		this.rooms[w][h][t].file = f;
-	}
-	
+var Scene = null;
+var camera = null;
+var AllSceneControler = null;
+var renderer = null;
+
+Init();
+animate();
+
+function Init() {
+    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000000);
+    camera.position.x = 0
+    camera.position.y = 0
+    camera.position.z = 500
+    Scene = new THREE.Scene();
+    AllSceneControler = new AllScene.Controler(10, 10, 2, Scene);
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 }
 
-//One room contains a scene to render
-AllScene.Room = function (file, pos) {
-    this.position = pos;
-}
-AllScene.Room.prototype =
-{
-	position: new THREE.Vector3(),
-	file: 'none_file',
-	scene: new THREE.Scene(),
-	loadModel: function()
-	{
-		//To Do: load the modle to the scene
-	}
-
+function animate() {
+    requestAnimationFrame(animate);
+    render();
 }
 
-AllScene.Controler = function () { }
-AllScene.Controler.prototype =
-{
-    currentRoom: new AllScene.Room('none_file'),
-    sceneRooms: new AllScene.RoomsContainer(),
-    callBack: function () { }, //May be we will do something when moving to another room
-    moveTo: function (x, y, z) {
-        try {
-            this.currentRoom = this.sceneRooms.rooms[x][y][z]
-        } catch (e) {
-            console.error('no such a room')
-        }
-    },
-    move: function (dir) {
-        //Right hand coordinate system z axis point to up
-        with (this.currentRoom.position) {
-            if (dir == 'Left') {
-                this.moveTo(x - 1, y, z)
-            }
-            else if (dir == 'Right') {
-                this.moveTo(x + 1, y, z)
-            }
-            else if (dir == 'Forward') {
-                this.moveTo(x, 1, z)
-            }
-            else if (dir == 'Back') {
-                this.moveTo(x, y - 1, z)
-            }
-            else if (dir == 'Up') {
-                this.moveTo(x, y, z + 1)
-            }
-            else if (dir == 'Down') {
-                this.moveTo(x, y, z - 1)
-            }
-        }
-    }
+function render() {
+    renderer.render(Scene, camera);
 }
 </script>
 
