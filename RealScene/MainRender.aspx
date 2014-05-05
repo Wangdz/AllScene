@@ -15,7 +15,12 @@
 
     <form id="form1" runat="server">
     <div>
-    
+    <input type='button' value='Move Left' onclick="moveDir('Left')"/>
+    <input type='button' value='Move Right' onclick="moveDir('Right')"/>
+    <input type='button' value='Move Forward' onclick="moveDir('Forward')"/>
+    <input type='button' value='Move Back' onclick="moveDir('Back')"/>
+    <input type='button' value='Move Up' onclick="moveDir('Up')"/>
+    <input type='button' value='Move Down' onclick="moveDir('Down')"/>
     </div>
     </form>
 </body>
@@ -23,6 +28,10 @@
 <script type="text/javascript" src="../Core/three.js"></script>
 <script type="text/javascript" src="../Core/AllScene.js"></script>
 <script type = "text/javascript">
+function moveDir(dir) {
+        AllSceneControler.move(dir);
+}
+
 var Scene = null;
 var camera = null;
 var AllSceneControler = null;
@@ -37,7 +46,8 @@ function Init() {
     camera.position.y = 0
     camera.position.z = 500
     Scene = new THREE.Scene();
-    AllSceneControler = new AllScene.Controler(10, 10, 2, Scene);
+    AllSceneControler = new AllScene.Controler(10, 10, 10, Scene);
+    AllSceneControler.moveTo(0, 0, 0);
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
@@ -49,6 +59,7 @@ function animate() {
 }
 
 function render() {
+    
     renderer.render(Scene, camera);
 }
 </script>

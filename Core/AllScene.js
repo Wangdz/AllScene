@@ -42,6 +42,8 @@ AllScene.Room = function (file, pos, ascene) {
     this.scene = ascene;
     this.file = file;
 }
+
+
 AllScene.Room.prototype =
 {
     position: new THREE.Vector3(),
@@ -50,8 +52,30 @@ AllScene.Room.prototype =
     scene: new THREE.Scene(),
     loadModel: function () {
         //Test
-        var geometry = new THREE.CubeGeometry(100, 100, 100);
+        var geometry = null;
+        var color = null;
+        if ((this.position.x + this.position.y + this.position.z) % 4 == 0) {
+            color = new THREE.Color(0x00ff00);
+        }
+        else if ((this.position.x + this.position.y + this.position.z) % 3 == 0) {
+            color = new THREE.Color(0x00ff00);
+        }
+        else if ((this.position.x + this.position.y + this.position.z) % 2 == 0) {
+            color = new THREE.Color(0x0000ff);
+        }
+        else {
+            color = new THREE.Color(0xffffff);
+        }
+
+        if ((this.position.x + this.position.y + this.position.z) % 2 == 0) {
+            geometry = new THREE.CubeGeometry(100, 100, 100)
+        }
+        else {
+            geometry = new THREE.SphereGeometry(100, 100, 100)
+        }
+
         var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        material.color = color;
         var cube = new THREE.Mesh(geometry, material);
         this.scene.add(cube);
     }
@@ -71,8 +95,12 @@ AllScene.Controler.prototype =
     callBack: function () { }, //May be we will do something when moving to another room
     moveTo: function (x, y, z) {
         try {
-            this.currentRoom = this.sceneRooms.rooms[x][y][z]
-            this.scene.children.length = 0;
+            tempRoom = this.sceneRooms.rooms[x][y][z]
+            if (tempRoom != undefined)
+            this.currentRoom = tempRoom;
+            for (var i = 0; i < this.scene.children.length; i++) {
+                this.scene.remove(this.scene.children[i]);
+            }
             this.currentRoom.loadModel();
         } catch (e) {
             console.error('no such a room')
@@ -88,7 +116,7 @@ AllScene.Controler.prototype =
                 this.moveTo(x + 1, y, z)
             }
             else if (dir == 'Forward') {
-                this.moveTo(x, 1, z)
+                this.moveTo(x, y + 1, z)
             }
             else if (dir == 'Back') {
                 this.moveTo(x, y - 1, z)
