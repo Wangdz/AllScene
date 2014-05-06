@@ -37,17 +37,13 @@ var camera = null;
 var AllSceneControler = null;
 var renderer = null;
 
-Init();
-animate();
-
 function Init() {
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000000);
     camera.position.x = 0
     camera.position.y = 0
     camera.position.z = 500
     Scene = new THREE.Scene();
-    AllSceneControler = new AllScene.Controler(10, 10, 10, Scene);
-    AllSceneControler.moveTo(0, 0, 0);
+    AllSceneControler = new AllScene.Controler('file', Scene, function () { Init(); animate(); });
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
@@ -59,7 +55,6 @@ function animate() {
 }
 
 function render() {
-    
     renderer.render(Scene, camera);
 }
 </script>

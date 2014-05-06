@@ -82,22 +82,61 @@ AllScene.Room.prototype =
 
 }
 
-AllScene.Controler = function (w, h, t, ascene) {
+AllScene.Controler = function (sFile, ascene, callBackFunc) {
+
     this.scene = ascene;
-    this.sceneRooms = new AllScene.RoomsContainer(w, h, t, this.scene);
-    this.moveTo(0, 0, 0);
+    this.callBack = callBackFunc;
+    loadFiles(sFile);
+
 }
 AllScene.Controler.prototype =
 {
     scene: null,
     currentRoom: null,
     sceneRooms: null,
+    loadFiles: function (sFile) 
+    {
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function () 
+        {
+            if (request.readyState == 4) 
+            {
+                if (request.status == 0 || request.status == 200) 
+                {
+                    if (request.responseXML) 
+                    {
+
+                    } 
+                    else if (request.responseText) 
+                    {
+                        ///-----------JASON Structure------------///
+                        ///SceneWidth,SceneHeight,SceneThick     ///
+                        ///StartPos                              ///
+                        var fixedResponse = response.responseText.replace(/\\'/g, "'");
+                        var jsonObj = JSON.parse(fixedResponse);
+                        this.sceneRooms = new AllScene.RoomsContainer(jsonObj.SceneWidth, jsonObj.SceneHeight, jsonObj.SceneThick, this.scene);
+                        this.moveTo(jsonObj.StartPos.x, jsonObj.StartPos.y, jsonObj.StartPos.z);
+                        this.callBack(); 
+                    } 
+                    else 
+                    {
+                        console.error("ColladaLoader: Empty or non-existing file (" + url + ")");
+                    }
+                }
+            } else if (request.readyState == 3) 
+            {
+                    
+            }
+        }
+        request.open("GET", url, true);
+        request.send(null);
+    },
     callBack: function () { }, //May be we will do something when moving to another room
     moveTo: function (x, y, z) {
         try {
             tempRoom = this.sceneRooms.rooms[x][y][z]
             if (tempRoom != undefined)
-            this.currentRoom = tempRoom;
+                this.currentRoom = tempRoom;
             for (var i = 0; i < this.scene.children.length; i++) {
                 this.scene.remove(this.scene.children[i]);
             }
