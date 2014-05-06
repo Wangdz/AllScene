@@ -33,6 +33,15 @@ AllScene.RoomsContainer.prototype =
 
     setModel: function (w, h, t, f) {
         this.rooms[w][h][t].file = f;
+    },
+
+    LoadRoomsFiles: function (jasonObj) {
+        for (var i = 0; i < this.width; i++) {
+            for (var j = 0; j < this.height; j++) {
+                for (var k = 0; k < this.thickness; k++)
+                    this.rooms[i][j].push(new AllScene.Room(jasonObj.files[i][j][k], new THREE.Vector3(i, j, k), this.scene));
+            }
+        }    
     }
 
 }
@@ -51,33 +60,15 @@ AllScene.Room.prototype =
     file: 'none_file',
     scene: new THREE.Scene(),
     loadModel: function () {
-        //Test
-        var geometry = null;
-        var color = null;
-        if ((this.position.x + this.position.y + this.position.z) % 4 == 0) {
-            color = new THREE.Color(0x00ff00);
-        }
-        else if ((this.position.x + this.position.y + this.position.z) % 3 == 0) {
-            color = new THREE.Color(0x00ff00);
-        }
-        else if ((this.position.x + this.position.y + this.position.z) % 2 == 0) {
-            color = new THREE.Color(0x0000ff);
-        }
-        else {
-            color = new THREE.Color(0xffffff);
-        }
-
-        if ((this.position.x + this.position.y + this.position.z) % 2 == 0) {
-            geometry = new THREE.CubeGeometry(100, 100, 100)
-        }
-        else {
-            geometry = new THREE.SphereGeometry(100, 100, 100)
-        }
-
-        var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        material.color = color;
-        var cube = new THREE.Mesh(geometry, material);
-        this.scene.add(cube);
+        //Set some UI effects
+        var loader = new THREE.ColladaLoader();
+        loader.options.convertUpAxis = true;
+        loader.load(this.file, function (collada) {
+            dae = collada.scene;
+            dae.scale.x = dae.scale.y = dae.scale.z = 0.002;
+            dae.updateMatrix();
+            this.scene.add(dae);
+        })
     }
 
 }
@@ -94,38 +85,31 @@ AllScene.Controler.prototype =
     scene: null,
     currentRoom: null,
     sceneRooms: null,
-    loadFiles: function (sFile) 
-    {
+    loadFiles: function (sFile) {
         var request = new XMLHttpRequest();
-        request.onreadystatechange = function () 
-        {
-            if (request.readyState == 4) 
-            {
-                if (request.status == 0 || request.status == 200) 
-                {
-                    if (request.responseXML) 
-                    {
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                if (request.status == 0 || request.status == 200) {
+                    if (request.responseXML) {
 
-                    } 
-                    else if (request.responseText) 
-                    {
+                    }
+                    else if (request.responseText) {
                         ///-----------JASON Structure------------///
                         ///SceneWidth,SceneHeight,SceneThick     ///
                         ///StartPos                              ///
                         var fixedResponse = response.responseText.replace(/\\'/g, "'");
                         var jsonObj = JSON.parse(fixedResponse);
                         this.sceneRooms = new AllScene.RoomsContainer(jsonObj.SceneWidth, jsonObj.SceneHeight, jsonObj.SceneThick, this.scene);
+                        this.sceneRooms.LoadRoomsFiles(jsonObj);
                         this.moveTo(jsonObj.StartPos.x, jsonObj.StartPos.y, jsonObj.StartPos.z);
-                        this.callBack(); 
-                    } 
-                    else 
-                    {
+                        this.callBack();
+                    }
+                    else {
                         console.error("ColladaLoader: Empty or non-existing file (" + url + ")");
                     }
                 }
-            } else if (request.readyState == 3) 
-            {
-                    
+            } else if (request.readyState == 3) {
+
             }
         }
         request.open("GET", url, true);

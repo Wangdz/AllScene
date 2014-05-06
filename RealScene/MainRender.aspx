@@ -26,6 +26,7 @@
 </body>
 </html>
 <script type="text/javascript" src="../Core/three.js"></script>
+<script type="text/javascript" src="../Core/ColladaLoader.js"></script>
 <script type="text/javascript" src="../Core/AllScene.js"></script>
 <script type = "text/javascript">
 function moveDir(dir) {
