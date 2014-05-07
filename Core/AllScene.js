@@ -58,9 +58,9 @@ AllScene.Room.prototype =
     position: new THREE.Vector3(),
     scene: null,
     file: 'none_file',
+    loadFunc: null,
     scene: new THREE.Scene(),
     loadModel: function () {
-        //Set some UI effects
         var loader = new THREE.ColladaLoader();
         loader.options.convertUpAxis = true;
         loader.load(this.file, function (collada) {
@@ -69,6 +69,9 @@ AllScene.Room.prototype =
             dae.updateMatrix();
             this.scene.add(dae);
         })
+        //Set UI effects
+        if (this.loadFunc != null)
+            this.loadFunc();
     }
 
 }
