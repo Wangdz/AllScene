@@ -3,6 +3,7 @@
 var AllScene = function () { }
 AllScene.RoomsContainer = function (w, h, t, ascene) {
     this.scene = ascene;
+    this.callBack = acallBack;
     this.setRange(w, h, t);
 }
 AllScene.RoomsContainer.prototype =
@@ -12,7 +13,7 @@ AllScene.RoomsContainer.prototype =
     height: 1,
     thickness: 1,
     rooms: [],
-
+    callBack: null,
     setRange: function (w, h, t) {
         this.width = w;
         this.height = h;
@@ -38,10 +39,12 @@ AllScene.RoomsContainer.prototype =
     LoadRoomsFiles: function (jasonObj) {
         for (var i = 0; i < this.width; i++) {
             for (var j = 0; j < this.height; j++) {
-                for (var k = 0; k < this.thickness; k++)
+                for (var k = 0; k < this.thickness; k++) {
                     this.rooms[i][j].push(new AllScene.Room(jasonObj.files[i][j][k], new THREE.Vector3(i, j, k), this.scene));
+                    this.rooms[i][j].loadFunc = this.callBack;
+                }
             }
-        }    
+        }
     }
 
 }
@@ -51,8 +54,6 @@ AllScene.Room = function (file, pos, ascene) {
     this.scene = ascene;
     this.file = file;
 }
-
-
 AllScene.Room.prototype =
 {
     position: new THREE.Vector3(),
@@ -75,7 +76,6 @@ AllScene.Room.prototype =
     }
 
 }
-
 AllScene.Controler = function (sFile, ascene, callBackFunc) {
 
     this.scene = ascene;
@@ -103,9 +103,9 @@ AllScene.Controler.prototype =
                         var fixedResponse = response.responseText.replace(/\\'/g, "'");
                         var jsonObj = JSON.parse(fixedResponse);
                         this.sceneRooms = new AllScene.RoomsContainer(jsonObj.SceneWidth, jsonObj.SceneHeight, jsonObj.SceneThick, this.scene);
+                        this.sceneRooms.callBack = this.callBack;
                         this.sceneRooms.LoadRoomsFiles(jsonObj);
                         this.moveTo(jsonObj.StartPos.x, jsonObj.StartPos.y, jsonObj.StartPos.z);
-                        this.callBack();
                     }
                     else {
                         console.error("ColladaLoader: Empty or non-existing file (" + url + ")");

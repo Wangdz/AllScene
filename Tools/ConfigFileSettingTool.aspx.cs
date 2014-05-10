@@ -16,5 +16,6 @@ public partial class Tools_ConfigFileSettingTool : System.Web.UI.Page
         //To Do: Generate the data of the SceneFilesConfig object then used the data
         //to build a json string, then save the json string to the file named by the ConfigFileName TextBox
         //For a further discussion, the data may be stored into a database
+        Response.Redirect("Step2.aspx");
     }
 }
