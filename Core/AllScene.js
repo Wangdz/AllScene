@@ -156,3 +156,21 @@ AllScene.Controler.prototype =
         }
     }
 }
+//Tools用操作空间 地面类 这地面应该可以响应鼠标的亮显
+//会接收盒子 并管理鼠标的吸附位置
+AllScene.Ground = function (aWith, aHeight) {
+    this.width = 1;
+    this.height = 1;
+}
+AllScene.Ground.prototype = {
+    width: 1,//地面网格的宽度
+    height: 1,//地面网格的高度(长度)
+    mesh: null, //一个网格类的实例。用作工作空间的布置地面
+    curCube: null, //一个网格类的实例。用作当前跟随鼠标的Cube。
+    roomsContainer: null, //一个AllScene.RoomsContainer的实例
+    generateCube: function (e){ //传进来一个鼠标位置，在鼠标位置建立一个Cube，给curCube,curCube会跟随鼠标移动，可能会被一个点击按钮的动作出发
+    },
+    Snap: function (e) { },//捕捉函数，会捕捉鼠标的位置，也管理curCube的跟随，然后运算接下来的立方体被放到的位置,会调用HIghtLight去亮显当前的地面网格，或者cube的上表面。
+    Dock: function (cube, vec3) {cube.position.set(vec3) },//根据参数在指定位置停放一个Cube
+    HightLight: function (vec3) { } //设置地面网格亮显,以及cube的上表面亮显。
+}

@@ -46,3 +46,38 @@ body
     </form>
 </body>
 </html>
+<script type="text/javascript" src="../Core/three.js"></script>
+<script type="text/javascript" src="../Core/ColladaLoader.js"></script>
+<script type="text/javascript" src="../Core/AllScene.js"></script>
+<%--<script type = "text/javascript">
+    function moveDir(dir) {
+        AllSceneControler.move(dir);
+    }
+
+    var Scene = null;
+    var camera = null;
+    var AllSceneControler = null;
+    var renderer = null;
+
+    function Init() {
+        camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000000);
+        camera.position.x = 0
+        camera.position.y = 0
+        camera.position.z = 500
+        Scene = new THREE.Scene();
+        AllSceneControler = new AllScene.Controler('file', Scene, function () { Init(); animate(); });
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+    }
+
+    function render() {
+        renderer.render(Scene, camera);
+    }
+</script>--%>
+
